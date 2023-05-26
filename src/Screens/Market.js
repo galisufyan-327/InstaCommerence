@@ -3,8 +3,9 @@ import SafeArea from "../Components/SafeArea";
 import { FlashList } from "@shopify/flash-list";
 import ProductCard from "../Components/ProductCard";
 import Header from "../Components/Header";
+import { AllProducts } from "../Context/DATA";
 
-const DATA = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+// market screen
 function Market({ navigation }) {
   function handleBackPress() {
     navigation.goBack();
@@ -13,8 +14,9 @@ function Market({ navigation }) {
     <SafeArea>
       <Header title={"Products"} onPress={handleBackPress} />
       <View style={styles.container}>
+        {/* lists all products */}
         <FlashList
-          data={DATA}
+          data={AllProducts}
           numColumns={2}
           estimatedItemSize={30}
           showsVerticalScrollIndicator={false}

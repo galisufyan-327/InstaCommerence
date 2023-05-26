@@ -3,28 +3,40 @@ import { View, Image, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-function Post() {
-  const [liked, setLiked] = useState(false);
+//used to render Single post.
+function Post({ item, disable, profileInfo }) {
+  const [liked, setLiked] = useState(item.liked);
   const navigation = useNavigation();
-
+  function handleNavigation() {
+    navigation.navigate("UserProfile", { userTitle: item.profileName });
+  }
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.profileInfoContainer}>
+      {/* This is profile info above image i.e. profile image and profile title */}
+      <TouchableOpacity
+        style={styles.profileInfoContainer}
+        onPress={handleNavigation}
+        disabled={disable}
+      >
         <Image
           style={styles.profileImage}
           source={{
-            uri: "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=",
+            uri: item.profilePicture || profileInfo.profilePicture,
           }}
         />
 
-        <Text style={styles.profileTitle}>Profile Name</Text>
+        <Text style={styles.profileTitle}>
+          {item.profileName || profileInfo.profileName}
+        </Text>
       </TouchableOpacity>
+      {/* this shows post Image. */}
       <Image
         style={styles.postImage}
         source={{
-          uri: "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=",
+          uri: item.image,
         }}
       />
+      {/* container for buttons below image i.e heart and comment */}
       <View style={styles.iconsRow}>
         <TouchableOpacity onPress={() => setLiked(!liked)}>
           <Octicons
@@ -33,7 +45,13 @@ function Post() {
             color={liked ? "red" : "black"}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Comments")}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Comments", {
+              postTitle: item.title,
+            })
+          }
+        >
           <Octicons name="comment" size={24} color="black" />
         </TouchableOpacity>
       </View>
@@ -53,8 +71,9 @@ const styles = StyleSheet.create({
   profileInfoContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
-    width: 150,
+    justifyContent: "flex-start",
+    paddingLeft: 10,
+    width: "90%",
   },
   profileImage: {
     height: 40,
@@ -63,6 +82,7 @@ const styles = StyleSheet.create({
   },
   profileTitle: {
     fontWeight: "bold",
+    marginLeft: 10,
   },
   postImage: {
     height: 250,

@@ -2,11 +2,16 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../Theme/Colors";
 
+//A cutom header component. with backbutton and title
 function Header({ title, onPress }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.opacity} onPress={onPress}>
-        <Ionicons name="ios-chevron-back-outline" size={40} color={Colors.darkGrey} />
+        <Ionicons
+          name="ios-chevron-back-outline"
+          size={40}
+          color={Colors.darkGrey}
+        />
       </TouchableOpacity>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{title}</Text>
@@ -34,6 +39,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
-    color: Colors.black
+    color: Colors.black,
   },
 });

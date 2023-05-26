@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -14,18 +14,31 @@ import FormInputField from "../Components/FormInputField";
 import FormSelectImage from "../Components/FormSelectImage";
 import { SegmentedButtons } from "react-native-paper";
 import { Colors } from "../Theme/Colors";
+import { Context as UserContext } from "../Context/UserContext";
 
+// screen to add new posts / products
 function NewPost({ navigation }) {
   const { control, handleSubmit, reset } = useForm();
+  const { addPost, addProduct } = useContext(UserContext);
+
   const [disabled, setDisabled] = useState(false);
   const [segment, setSegment] = useState("post");
 
+  //adds new post/product with a delay of 1 second.
   function newPost(data) {
-    console.log(data);
     setDisabled(true);
     setTimeout(() => {
       reset();
       setDisabled(false);
+      if (segment === "post") {
+        const post = {
+          ...data,
+          liked: false,
+        };
+        addPost(post);
+      } else {
+        addProduct(data);
+      }
       navigation.navigate("HomeScreen");
     }, 1000);
   }
@@ -56,7 +69,8 @@ function NewPost({ navigation }) {
 
           <View style={styles.container}>
             <FormSelectImage
-              name={"Image"}
+              name={"image"}
+              title={"Image"}
               control={control}
               rule={{
                 required: "Image must be selected.",
@@ -64,7 +78,7 @@ function NewPost({ navigation }) {
             />
 
             <FormInputField
-              name={"Title"}
+              name={"title"}
               placeholder={"Enter title here."}
               control={control}
               rule={{
@@ -74,13 +88,15 @@ function NewPost({ navigation }) {
             {segment === "product" ? (
               <>
                 <FormInputField
-                  name={"Description"}
+                  name={"description"}
+                  title={"Description"}
                   placeholder={"Enter Description here."}
                   multiline
                   control={control}
                 />
                 <FormInputField
-                  name={"Price"}
+                  name={"price"}
+                  title={"Price"}
                   placeholder={"Enter price here."}
                   keyboardType={"number-pad"}
                   control={control}
@@ -94,12 +110,13 @@ function NewPost({ navigation }) {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <View style={{ flex: 1 }} />
-      <PrimaryButton
-        title={"Publish"}
-        onPress={handleSubmit(newPost)}
-        disabled={disabled}
-      />
+      <View style={{ flex: 1, justifyContent: "flex-end" }}>
+        <PrimaryButton
+          title={"Publish"}
+          onPress={handleSubmit(newPost)}
+          disabled={disabled}
+        />
+      </View>
     </SafeArea>
   );
 }

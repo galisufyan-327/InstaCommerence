@@ -17,7 +17,11 @@ import ProductDetails from "./ProductDetails";
 
 const BottomTab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
 
+// this file containes all navigation of app
+
+// this function contains main navigator and bottom tab navigation.
 export const NavContainer = () => {
   return (
     <NavigationContainer>
@@ -57,7 +61,7 @@ export const NavContainer = () => {
         />
         <BottomTab.Screen
           name="Profile"
-          component={Profile}
+          component={ProfileScreenStack}
           options={{
             tabBarIcon: ({ color }) => (
               <Octicons name="person" size={30} color={color} />
@@ -69,8 +73,17 @@ export const NavContainer = () => {
   );
 };
 
+// this function handles navigation for home screen stack
 function HomeScreenStack({ navigation, route }) {
-  const tabHiddenRoutes = ["Comments", "PostList", "Market", "ProductDetail"];
+  const tabHiddenRoutes = [
+    "Comments",
+    "PostList",
+    "Market",
+    "ProductDetail",
+    "UserProfile",
+  ];
+  //this layout hides bottom tab bar on some specified screens
+
   useLayoutEffect(() => {
     if (tabHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))) {
       navigation.setOptions({ tabBarStyle: { display: "none" } });
@@ -93,6 +106,37 @@ function HomeScreenStack({ navigation, route }) {
       <HomeStack.Screen name="Market" component={Market} />
       <HomeStack.Screen name="PostList" component={PostList} />
       <HomeStack.Screen name="ProductDetail" component={ProductDetails} />
+      <HomeStack.Screen name="UserProfile" component={Profile} />
     </HomeStack.Navigator>
+  );
+}
+
+//this is for profile screen stack
+function ProfileScreenStack({ navigation, route }) {
+  const tabHiddenRoutes = ["Comments", "PostList", "Market", "ProductDetail"];
+
+  //this layout hides bottom tab bar on some screens
+  useLayoutEffect(() => {
+    if (tabHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))) {
+      navigation.setOptions({ tabBarStyle: { display: "none" } });
+    } else {
+      navigation.setOptions({
+        tabBarStyle: {
+          height: 60,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          marginTop: -10,
+          backgroundColor: Colors.offWhite,
+        },
+      });
+    }
+  }, [navigation, route]);
+  return (
+    <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
+      <ProfileStack.Screen name="Profile" component={Profile} />
+      <ProfileStack.Screen name="Comments" component={Comments} />
+      <ProfileStack.Screen name="PostList" component={PostList} />
+      <ProfileStack.Screen name="ProductDetail" component={ProductDetails} />
+    </ProfileStack.Navigator>
   );
 }

@@ -3,13 +3,13 @@ import { Controller } from "react-hook-form";
 import * as ImagePicker from "expo-image-picker";
 import { EvilIcons } from "@expo/vector-icons";
 
-const FormSelectImage = ({ control, name, rule }) => {
+//This component handles image picker  and validates selected image.
+const FormSelectImage = ({ control, name, rule, title }) => {
   async function openGallery() {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      console.log("Permission to access camera roll is required!");
       return;
     }
 
@@ -27,13 +27,14 @@ const FormSelectImage = ({ control, name, rule }) => {
     }
   }
   return (
+    //control for selected image
     <Controller
       control={control}
       name={name}
       rules={rule}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <>
-          <Text style={styles.title}>{name}</Text>
+          <Text style={styles.title}>{title}</Text>
           <TouchableOpacity
             style={styles.imageButton}
             onPress={async () => {
@@ -61,7 +62,7 @@ const FormSelectImage = ({ control, name, rule }) => {
               </View>
             )}
           </TouchableOpacity>
-
+          {/* This component shows Errors if present */}
           {error && (
             <View style={styles.errorContainer}>
               <Text style={styles.error}>{error.message || "Error"}</Text>

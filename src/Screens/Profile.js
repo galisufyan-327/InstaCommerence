@@ -13,54 +13,74 @@ import { Colors } from "../Theme/Colors";
 import { SegmentedButtons } from "react-native-paper";
 import PostThumbnail from "../Components/PostThumbnail";
 import ProductCard from "../Components/ProductCard";
+import { AppUsers } from "../Context/DATA";
+import HeaderTop from "../Components/Header";
 
-function Profile() {
+// this profle screen shows details of user
+function Profile({ route, navigation }) {
+  const userTitle = route.params?.userTitle ?? "";
+  const user = AppUsers.find((user) => user.title === userTitle);
   const { state } = useContext(UserContext);
+  const obj = user !== undefined ? user : state;
+
   const { width } = useWindowDimensions();
   const [segment, setSegment] = useState("post");
-  function PostItem({ width, item }) {
-    return <PostThumbnail width={width} item={item} />;
-  }
-
-  function ProductItem() {
-    return <ProductCard />;
-  }
 
   function renderItem({ item }) {
     if (segment === "post") {
-      return <PostItem width={(width - 100) / 3} item={item} />;
+      return (
+        <PostThumbnail
+          width={(width - 100) / 3}
+          item={item}
+          postList={obj.posts}
+          profileInfo={{
+            profileName: obj.title,
+            profilePicture: obj.profilePicture,
+          }}
+        />
+      );
     } else {
-      return <ProductItem />;
+      return <ProductCard item={item} />;
     }
   }
   function keyExtractor(item, index) {
     return index.toString(); // Provide a unique key for each item
   }
+  function handleBackPress() {
+    navigation.goBack();
+  }
   function Header() {
     return (
       <>
+        {user && (
+          <HeaderTop
+            title={`${obj.title}'s Profile`}
+            onPress={handleBackPress}
+          />
+        )}
+
         <Image
           style={styles.coverImage}
           source={{
-            uri: state.coverPicture,
+            uri: obj.coverPicture,
           }}
         />
         <View style={styles.profileInfoContainer}>
           <View style={styles.followContainer}>
-            <Text style={styles.followNumber}>{state.followers}</Text>
+            <Text style={styles.followNumber}>{obj.followers}</Text>
             <Text style={styles.followText}>Followers</Text>
           </View>
           <View style={styles.profileInfo}>
             <Image
               style={styles.profileImage}
               source={{
-                uri: state.profilePicture,
+                uri: obj.profilePicture,
               }}
             />
-            <Text style={styles.profileName}>{state.title}</Text>
+            <Text style={styles.profileName}>{obj.title}</Text>
           </View>
           <View style={styles.followContainer}>
-            <Text style={styles.followNumber}>{state.following}</Text>
+            <Text style={styles.followNumber}>{obj.following}</Text>
             <Text style={styles.followText}>Following</Text>
           </View>
         </View>
@@ -96,7 +116,7 @@ function Profile() {
         <FlashList
           ListHeaderComponent={Header}
           numColumns={3}
-          data={state.posts}
+          data={segment === "post" ? obj.posts : obj.products}
           showsHorizontalScrollIndicator={false}
           estimatedItemSize={30}
           renderItem={renderItem}

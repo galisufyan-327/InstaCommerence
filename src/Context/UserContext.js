@@ -1,36 +1,30 @@
 import createDataContext from "./createDataContext";
 import { User } from "./DATA";
 
+// this file generated and updates state for the user object
 const userReducer = (state, action) => {
   switch (action.type) {
-    case "add_error":
-      return { ...state, errorMessage: action.payload };
-    case "signIn":
-      return { token: action.payload, errorMessage: "" };
-    case "signout":
-      return { ...state, token: action.payload };
+    case "add_post":
+      return { ...state, posts: [action.payload, ...state.posts] };
+    case "add_product":
+      return { ...state, products: [action.payload, ...state.products] };
+
     default: {
       return state;
     }
   }
 };
 
-const tryLocalSignin = (dispatch) => async () => {
-  const token = await SecureStore.getItemAsync("Current_User");
-  if (token != null) {
-    dispatch({ type: "signIn", payload: token });
-  }
+const addPost = (dispatch) => (post) => {
+  dispatch({ type: "add_post", payload: post });
 };
 
-const signout = (dispatch) => {
-  return async () => {
-    await SecureStore.deleteItemAsync("Current_User");
-    dispatch({ type: "signout", payload: null });
-  };
+const addProduct = (dispatch) => (product) => {
+  dispatch({ type: "add_product", payload: product });
 };
 
 export const { Provider, Context } = createDataContext(
   userReducer,
-  { signout, tryLocalSignin },
+  { addPost, addProduct },
   { ...User }
 );

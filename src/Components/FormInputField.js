@@ -1,11 +1,12 @@
 import { View, Image, TextInput, StyleSheet, Text } from "react-native";
-
 import { Controller } from "react-hook-form";
 import { Colors } from "../Theme/Colors";
 
+//This component is responsible for handling the input field with react-hook-form.
 const FormInputField = ({
   control,
   name,
+  title,
   rule,
   placeholder,
   secureTextEntry,
@@ -13,6 +14,7 @@ const FormInputField = ({
   multiline,
 }) => {
   return (
+    // controller for input
     <Controller
       control={control}
       name={name}
@@ -22,7 +24,7 @@ const FormInputField = ({
         fieldState: { error },
       }) => (
         <>
-          <Text style={styles.title}>{name}</Text>
+          <Text style={styles.title}>{title}</Text>
           <View
             style={[
               styles.container,
@@ -40,7 +42,7 @@ const FormInputField = ({
               keyboardType={keyboardType || "default"}
             />
           </View>
-
+          {/* This component shows Errors if present */}
           {error && (
             <View style={styles.errorContainer}>
               <Text style={styles.error}>{error.message || "Error"}</Text>
@@ -76,6 +78,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   errorContainer: {
+    height: 30,
     width: "90%",
     alignSelf: "center",
     marginBottom: -10,

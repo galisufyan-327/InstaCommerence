@@ -1,21 +1,18 @@
 import { View, Text, Image, StyleSheet } from "react-native";
 
+//This component render single comment.
 function Comment({ item }) {
   return (
     <View style={styles.container}>
       <Image
         style={styles.profileImage}
         source={{
-          uri: "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=",
+          uri: item.profilePicture,
         }}
       />
       <View style={styles.textContainer}>
-        <Text style={styles.profileTitle}>Profile Title</Text>
-        <Text style={styles.commentText}>
-          This is my Comment FlashList's rendered size is not usable. Either the
-          height or width is too small. Please make sure that the parent view of
-          the list has a valid size. FlashList will match the size of the parent
-        </Text>
+        <Text style={styles.profileTitle}>{item.profileName}</Text>
+        <Text style={styles.commentText}>{item.comment}</Text>
       </View>
     </View>
   );

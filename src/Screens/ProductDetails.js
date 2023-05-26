@@ -10,7 +10,9 @@ import { Colors } from "../Theme/Colors";
 import PrimaryButton from "../Components/PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 
-function ProductDetails({ navigation }) {
+//product details screen. that shows product details as in title , picture, price.
+function ProductDetails({ navigation, route }) {
+  const { product } = route.params;
   function handleBackPress() {
     navigation.goBack();
   }
@@ -20,7 +22,7 @@ function ProductDetails({ navigation }) {
         resizeMode="cover"
         style={styles.image}
         source={{
-          uri: "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=",
+          uri: product.image,
         }}
       >
         <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
@@ -32,14 +34,12 @@ function ProductDetails({ navigation }) {
         </TouchableOpacity>
       </ImageBackground>
       <View style={styles.footer}>
-        <Text style={styles.title}>daksjdk</Text>
-        <Text style={styles.price} numberOfLines={2}>
-          Rs. 0
+        <Text style={styles.title}>{product.title}</Text>
+        <Text style={styles.price} numberOfLines={1}>
+          $ {product.price}
         </Text>
         <Text style={styles.description}>Description:</Text>
-        <Text style={styles.text}>
-          1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=
-        </Text>
+        <Text style={styles.text}>{product.description}</Text>
 
         <View style={{ flex: 1 }} />
         <PrimaryButton title={"Buy Now"} />
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontSize: 28,
     fontWeight: "bold",
+    width: "70%",
   },
 
   text: {

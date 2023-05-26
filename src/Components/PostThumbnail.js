@@ -1,17 +1,23 @@
 import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-function PostThumbnail({ width }) {
+//this component is render in profile ,shows only the image
+function PostThumbnail({ width, item, postList, profileInfo }) {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
       style={[styles.container, { minWidth: width }]}
-      onPress={() => navigation.navigate("PostList")}
+      onPress={() =>
+        navigation.navigate("PostList", {
+          postArray: postList,
+          profileInfo: profileInfo,
+        })
+      }
     >
       <Image
         style={styles.coverImage}
         source={{
-          uri: "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=",
+          uri: item.image,
         }}
       />
     </TouchableOpacity>

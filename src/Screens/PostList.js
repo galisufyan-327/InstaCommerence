@@ -5,8 +5,11 @@ import Post from "../Components/Post";
 import { Colors } from "../Theme/Colors";
 import Header from "../Components/Header";
 
-const DATA = [1, 2, 3, 4, 5];
-function PostList({ navigation }) {
+//shows all posts of a user
+function PostList({ navigation, route }) {
+  const { postArray } = route.params;
+  const profileInfo = route.params?.profileInfo ?? "";
+
   function handleBackPress() {
     navigation.goBack();
   }
@@ -15,8 +18,10 @@ function PostList({ navigation }) {
       <Header title={"All Posts"} onPress={handleBackPress} />
       <View style={styles.container}>
         <FlashList
-          data={DATA}
-          renderItem={({ item }) => <Post item={item} />}
+          data={postArray}
+          renderItem={({ item }) => (
+            <Post item={item} disable profileInfo={profileInfo} />
+          )}
           estimatedItemSize={50}
           showsVerticalScrollIndicator={false}
           ListFooterComponent={
