@@ -106,17 +106,14 @@ function NewPost({ navigation }) {
                 />
               </>
             ) : null}
+            <PrimaryButton
+              title={"Publish"}
+              onPress={handleSubmit(newPost)}
+              disabled={disabled}
+            />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-
-      <View style={{ flex: 1, justifyContent: "flex-end" }}>
-        <PrimaryButton
-          title={"Publish"}
-          onPress={handleSubmit(newPost)}
-          disabled={disabled}
-        />
-      </View>
     </SafeArea>
   );
 }
